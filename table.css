@@ -1,0 +1,33 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+thead {
+
+	display: table-header-group;
+	color: #76b900
+}
+
+thead td {
+	font-family: Segoe UI, Trebuchet MS, Arial Unicode MS, Arial, sans-serif;
+	text-shadow: 0 1px 2px black;
+	font-size: 1.17em;
+	font-weight: bold;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+.left-table {
+	text-align: left;
+}
+
+tbody tr {
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
