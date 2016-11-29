@@ -20,3 +20,8 @@ function openHive(sameTab) {
 }
 
 chrome.browserAction.onClicked.addListener(main);
+chrome.storage.sync.get({
+        sameTab: false
+    }, function (items) {
+        title = items.sameTab ? "Open Hive in same tab" : "Open Hive in new tab";
+    });
