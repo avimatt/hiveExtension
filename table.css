@@ -23,14 +23,6 @@ td, th {
     padding: 8px;
 }
 
-tr:nth-of-type(even) {
-    background-color: rgb(34, 34, 34);
-}
-
-tr:hover {
-    background-color: rgba(125,205,0,0.5);
-}
-
 .left-table {
 	text-align: left;
 }
@@ -38,4 +30,12 @@ tr:hover {
 tbody tr {
 	padding-top: 1em;
 	padding-bottom: 1em;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: rgb(34, 34, 34);
+}
+
+tbody tr:hover {
+    background-color: rgba(125,205,0,0.5);
 }
