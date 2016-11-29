@@ -1,6 +1,5 @@
 {
   "manifest_version": 2,
-
   "name": "Hive++",
   "description": "This extension adds a summary of how many exercises on hive one needs to complete (it takes about 7 sec to load the home page)",
   "version": "1.0.2",
@@ -10,14 +9,34 @@
     "128": "hive++_logo.png"
   },
   "browser_action": {
-    "default_icon": "hive.png"
+    "default_icon": "hive.png",
+    "default_title": "Open Hive in new tab"
   },
   "content_scripts": [
     {
-      "matches": ["http://hive.itcapp.com/"],
-      "css": ["table.css"],
-      "js": ["jquery-3.1.1.min.js", "insert_stuff.js"], 
+      "matches": [
+        "http://hive.itcapp.com/"
+      ],
+      "css": [
+        "table.css"
+      ],
+      "js": [
+        "jquery-3.1.1.min.js",
+        "insert_stuff.js"
+      ],
       "run_at": "document_end"
     }
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
+  "permissions": [
+    "storage"
   ]
 }
