@@ -2,6 +2,7 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
+	line-height: 1.5;
 }
 
 thead {
@@ -24,6 +25,10 @@ td, th {
 
 tr:nth-of-type(even) {
     background-color: rgb(34, 34, 34);
+}
+
+tr:hover {
+    background-color: rgba(125,205,0,0.5);
 }
 
 .left-table {
