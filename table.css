@@ -23,8 +23,12 @@ td, th {
     padding: 8px;
 }
 
-.left-table {
+tbody td:first-of-type {
 	text-align: left;
+}
+
+td.zero {
+	color: #888;
 }
 
 tbody tr {
@@ -38,4 +42,13 @@ tbody tr:nth-of-type(even) {
 
 tbody tr:hover {
     background-color: rgba(125,205,0,0.5);
+}
+
+td a {
+    color: inherit;
+	display: block;
+}
+
+td:hover a {
+	text-decoration: underline;
 }
