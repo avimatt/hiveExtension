@@ -1,8 +1,12 @@
+div#content {
+	padding-bottom: 20px;
+}
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-	line-height: 1.5;
+	line-height: 1.7;
 }
 
 thead {
@@ -23,13 +27,22 @@ td, th {
     padding: 8px;
 }
 
-.left-table {
-	text-align: left;
+tbody td {
+	font-weight: bold;
 }
 
-tbody tr {
-	padding-top: 1em;
-	padding-bottom: 1em;
+tbody td:first-of-type {
+	text-align: left;
+	font-weight: unset;
+}
+
+td.zero {
+	color: #666;
+	font-weight: unset;
+}
+
+tbody tr.done {
+	color: #666;
 }
 
 tbody tr:nth-of-type(even) {
@@ -38,4 +51,13 @@ tbody tr:nth-of-type(even) {
 
 tbody tr:hover {
     background-color: rgba(125,205,0,0.5);
+}
+
+td a {
+    color: inherit;
+	display: block;
+}
+
+td:hover a {
+	text-decoration: underline;
 }

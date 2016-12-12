@@ -1,4 +1,5 @@
-function main() {
+// Runs after icon click
+function iconClicked() {
     chrome.storage.sync.get({
         sameTab: false
     }, function (items) {
@@ -6,6 +7,7 @@ function main() {
     });
 }
 
+// Open Hive page
 function openHive(sameTab) {
     HIVE_URL = "http://hive.itcapp.com";
     if (sameTab) {
@@ -19,7 +21,8 @@ function openHive(sameTab) {
     }
 }
 
-chrome.browserAction.onClicked.addListener(main);
+// Runs after start
+chrome.browserAction.onClicked.addListener(iconClicked);
 chrome.storage.sync.get({
         sameTab: false
     }, function (items) {

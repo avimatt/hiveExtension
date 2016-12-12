@@ -6,14 +6,31 @@
 </head>
 
 <body>
-    <p>
-        <label>
+    <form id="settings">
+        <p>
+            <label>
         <input type="checkbox" id="sameTab">
         Open in the same tab
         </label>
-    </p>
-    <button id="save">Save</button>
-    <span id="status"></span>
+        </p>
+        <p>
+            <label>
+        <input type="checkbox" id="removeToilet">
+        Remove Toilet button
+        </label>
+        </p>
+        <p>
+            <label>
+        <input type="number" id="maxWidth" min="0">
+        If you want to make main site block (everything below the menu) more narrow, pick width in pixel up by taste (I recommend 1200px).
+        </label>
+        </p>
+        <button type="submit">Save</button>
+        <button type="reset">Reset</button>
+
+        <!--<input type="submit" value="Submit" id="save">-->
+    </form>
+    <span id="status" style="opacity: 0;">Options saved.</span>
 
     <script src="options.js"></script>
 </body>
