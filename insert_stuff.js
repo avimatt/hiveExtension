@@ -89,8 +89,8 @@ div_top.appendChild(table);
 /*************** Functions ******************/
 
 function remove_all_assignments() {
-    while (content.firstChild) {
-        content.removeChild(content.firstChild);
+    while (content.lastChild) {
+        content.removeChild(content.lastChild);
     }
 }
 
