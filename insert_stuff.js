@@ -135,9 +135,8 @@ function do_the_work(subjects_list) {
             if (stats[stat] == 0) cell.className = "zero"; // dim cell if value is 0
         }
 
-        // dim whole row if everything is Done,
-        // i.e. Todo=0, Redo=0, Submitted=0 and Done>0 
-        if (!stats.todo && !stats.redo && !stats.submitted && stats.done) {
+        // dim whole row if everything is Done
+        if (stats.todo == 0 && stats.redo == 0 && stats.submitted == 0 && stats.done != 0) {
             row.className = "done";
         }
     })
