@@ -24,13 +24,13 @@ div_top.className = "message_board";
 // Create the To Redo Section
 var to_redo_div = document.createElement("div");
 var title_redo = document.createElement("h2");
-title_redo.innerHTML = "Assignments To Redo";
+title_redo.innerText = "Assignments To Redo";
 to_redo_div.appendChild(title_redo);
 
 // Create the To Do Section
 var todo_div = document.createElement("div")
 var title_todo = document.createElement("h2");
-title_todo.innerHTML = "Assignments To Do";
+title_todo.innerText = "Assignments To Do";
 todo_div.appendChild(title_todo);
 
 // Create Table And Column Headers
@@ -41,11 +41,11 @@ var h2 = row.insertCell(1);
 var h3 = row.insertCell(2);
 var h4 = row.insertCell(3);
 var h5 = row.insertCell(4);
-h1.innerHTML = "Module";
-h2.innerHTML = "To Do";
-h3.innerHTML = "Redo";
-h4.innerHTML = "Submitted";
-h5.innerHTML = "Done";
+h1.innerText = "Module";
+h2.innerText = "To Do";
+h3.innerText = "Redo";
+h4.innerText = "Submitted";
+h5.innerText = "Done";
 tBody = table.createTBody(); // add tbody to table so insertRow append to tbody not thead  
 
 // Add Elements
@@ -82,8 +82,8 @@ function add_assignment(href, name, module, redo_flag) {
     div.className = "message_board";
     a.href = href;
     ass_name = "Assignment: " + name;
-    h3.innerHTML = ass_name + " (" + module + ")";
-    //p.innerHTML = "Your Assignment, " + name + " in " + module + " needs to be completed";
+    h3.innerText = ass_name + " (" + module + ")";
+    //p.innerText = "Your Assignment, " + name + " in " + module + " needs to be completed";
 
     // Add elemnts to the DOM
     a.appendChild(h3);
@@ -131,7 +131,7 @@ function do_the_work(subjects_list) {
         row.insertCell().innerHTML = `<a href="${subject_url}">${subject_name}</a>`; // row header
         for (stat in stats) { // filling number columns
             let cell = row.insertCell();
-            cell.innerHTML = stats[stat];
+            cell.innerText = stats[stat];
             if (stats[stat] == 0) cell.className = "zero"; // dim cell if value is 0
         }
 
