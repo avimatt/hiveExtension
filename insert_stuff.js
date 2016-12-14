@@ -33,36 +33,6 @@ var title_todo = document.createElement("h2");
 title_todo.innerHTML = "Assignments To Do";
 todo_div.appendChild(title_todo);
 
-// Get info from other pages
-let modules_list = [];  // global array for all excercises
-let assigment_list = document.querySelector("#navi-bar > ul > li:nth-child(2) > ul").children;
-
-modules_yet_unprocessed = assigment_list.length; // to count how many async threads already done
-
-for (let assigment of assigment_list) {
-    uri = '/rest/course/Assignment?exercise__module__subject__name=' + escape(assigment.children[0].text);
-    fetch(uri, {
-        credentials: 'include'
-    })
-        // check response HTTP code
-        .then(function (response) {
-            if (response.status >= 200 && response.status < 300) {
-                return response;
-            } else {
-                let error = new Error(response.statusText);
-                error.response = response;
-                throw error;
-            }
-        })
-        .then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            do_the_work(json);
-        }).catch(function (ex) {
-            console.log('request failed ::', ex);
-        })
-}
-
 // Create Table And Column Headers
 var header = table.createTHead();
 var row = header.insertRow(0);
@@ -78,12 +48,17 @@ h4.innerHTML = "Submitted";
 h5.innerHTML = "Done";
 tBody = table.createTBody(); // add tbody to table so insertRow append to tbody not thead  
 
-
 // Add Elements
 content.appendChild(div_top);
 content.appendChild(to_redo_div);
 content.appendChild(todo_div);
 div_top.appendChild(table);
+
+// Download json of every subject
+let assigment_array = Array.from(document.querySelector("#navi-bar > ul > li:nth-child(2) > ul").children);
+let json_url_array = assigment_array.map(el => '/rest/course/Assignment?exercise__module__subject__name=' + (el.children[0].text));
+let json_promises_array = json_url_array.map(url => fetch(url, { credentials: 'include' }).then(x => x.json()));
+Promise.all(json_promises_array).then(do_the_work).catch(ex => { console.log('request failed ::', ex) });
 
 
 /*************** Functions ******************/
@@ -107,7 +82,7 @@ function add_assignment(href, name, module, redo_flag) {
     div.className = "message_board";
     a.href = href;
     ass_name = "Assignment: " + name;
-    h3.innerHTML = ass_name + "(" + module + ")";
+    h3.innerHTML = ass_name + " (" + module + ")";
     //p.innerHTML = "Your Assignment, " + name + " in " + module + " needs to be completed";
 
     // Add elemnts to the DOM
@@ -118,84 +93,52 @@ function add_assignment(href, name, module, redo_flag) {
 }
 
 
-// Use JSON to populate the tables
-function do_the_work(json) {
-    let module_name = json["0"].exercise.module.subject.name;
-    let module_url = "/course/status?subject=" + module_name;
-    let todo = 0, redo = 0, submitted = 0, done = 0;
-
-    // Go throught current module's json to count different types of excercises
-    json.forEach((excercise) => {
-        switch (excercise.status) {
-            case "New":
-                todo++;
-                add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name, false);
-                break;
-            case "Redo":
-                redo++;
-                add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name, true);
-                break;
-            case "Submitted":
-                submitted++;
-                break;
-            case "Done":
-                done++;
-                break;
-            default:
-                break;
+// parse objects and populate the table
+function do_the_work(subjects_list) {
+    subjects_list.forEach(subject => {
+        let subject_name = subject["0"].exercise.module.subject.name;
+        let subject_url = "/course/status?subject=" + subject_name;
+        let stats = {
+            todo: 0,
+            redo: 0,
+            submitted: 0,
+            done: 0
         }
-    });
 
-    // Collect array of modules and its values
-    // Every element of modules_list[] contains:
-    // Name of module
-    // URL of module
-    // Count of Todo, Redo, Submitted and Done exc.
-    modules_list.push([
-        [module_name, module_url],
-        todo,
-        redo,
-        submitted,
-        done
-    ]);
-
-    // Decrement counter of processed modules
-    modules_yet_unprocessed--;
-
-    // if all modules already processed, do after-async table filling
-    if (modules_yet_unprocessed <= 0) {
-        sort_array_and_fill_table_after_async();
-    }
-}
-
-
-// Doing after-async table filling to avoid table flickering during loading 
-function sort_array_and_fill_table_after_async() {
-
-    // sort array in alphabetical order of modules name
-    modules_list.sort((a, b) => {
-        return (a[0][1] > b[0][1] ? 1 : -1);
-    });
-
-    // fill up every row from array
-    modules_list.forEach((current_module) => {
-        var row = tBody.insertRow();
-
-        current_module.forEach((value, n) => {
-            var cell = row.insertCell();
-
-            if (n == 0) { // if first column
-                cell.innerHTML = `<a href="${value[1]}">${value[0]}</a>`;
-            } else { // if 'number' columns
-                cell.innerHTML = value;
-                if (value == 0) cell.className = "zero"; // make zero values grey and non-bold
+        // Go throught current subject's json to count different states of excercises
+        subject.forEach((excercise) => {
+            switch (excercise.status) {
+                case "New":
+                    stats.todo++;
+                    add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name, false);
+                    break;
+                case "Redo":
+                    stats.redo++;
+                    add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name, true);
+                    break;
+                case "Submitted":
+                    stats.submitted++;
+                    break;
+                case "Done":
+                    stats.done++;
+                    break;
+                default:
+                    break;
             }
         });
 
-        // make whole row grey if everything is Done:
-        // Todo=0, Redo=0, Submitted=0 and Done>0 
-        if (!current_module[1] && !current_module[2] && !current_module[3] && current_module[4]) {
+        let row = tBody.insertRow();
+        row.insertCell().innerHTML = `<a href="${subject_url}">${subject_name}</a>`; // row header
+        for (stat in stats) { // filling number columns
+            let cell = row.insertCell();
+            cell.innerHTML = stats[stat];
+            if (stats[stat] == 0) cell.className = "zero"; // dim cell if value is 0
+        }
+
+        // dim whole row if everything is Done,
+        // i.e. Todo=0, Redo=0, Submitted=0 and Done>0 
+        if (!stats.todo && !stats.redo && !stats.submitted && stats.done) {
             row.className = "done";
         }
-    });
+    })
 }
