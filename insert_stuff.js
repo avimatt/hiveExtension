@@ -10,6 +10,8 @@
  * -[ ] cache data and update in background
  * -[x] option: page max-width
  * -[x] option: remove toilet button
+ * -[ ] option: not remove messages
+ * -[ ] option: not render Todo and Redo lists
  */
 
 // Get the main div of the page and clear it
@@ -107,14 +109,15 @@ function do_the_work(subjects_list) {
 
         // Go throught current subject's json to count different states of excercises
         subject.forEach((excercise) => {
+            console.log(excercise);
             switch (excercise.status) {
                 case "New":
                     stats.todo++;
-                    add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name, false);
+                    add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name + " [" + excercise.exercise.module.name + "]", false);
                     break;
                 case "Redo":
                     stats.redo++;
-                    add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name, true);
+                    add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name + " [" + excercise.exercise.module.name + "]", true);
                     break;
                 case "Submitted":
                     stats.submitted++;
