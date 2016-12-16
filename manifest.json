@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Hive++",
-  "description": "This extension adds a summary of how many exercises on hive one needs to complete (it takes about 7 sec to load the home page)",
-  "version": "2.0.2",
+  "description": "This extension adds a summary of how many exercises on hive one needs to complete",
+  "version": "2.0.0",
   "icons": {
     "16": "hive++_logo16.png",
     "48": "hive++_logo48.png",

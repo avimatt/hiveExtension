@@ -1,17 +1,9 @@
-/**
- * NEW:
- * - Option to make main site block (everything below the menu) more narrow
- * - Option to remove Toilet button
- * - Table rows are now links to corresponding modules
- * - Modules that done completely (no todo, redo and submitted) are now grey in table
- * 
+/*
  * TODO:
- * -[x] do by fetch()
  * -[ ] cache data and update in background
- * -[x] option: page max-width
- * -[x] option: remove toilet button
  * -[ ] option: not remove messages
  * -[ ] option: not render Todo and Redo lists
+ * -[ ] option: not render table
  */
 
 // Get the main div of the page and clear it
@@ -26,13 +18,13 @@ div_top.className = "message_board";
 // Create the To Redo Section
 var to_redo_div = document.createElement("div");
 var title_redo = document.createElement("h2");
-title_redo.innerText = "Assignments To Redo";
+title_redo.innerHTML = "Assignments To Redo";
 to_redo_div.appendChild(title_redo);
 
 // Create the To Do Section
 var todo_div = document.createElement("div")
 var title_todo = document.createElement("h2");
-title_todo.innerText = "Assignments To Do";
+title_todo.innerHTML = "Assignments To Do";
 todo_div.appendChild(title_todo);
 
 // Create Table And Column Headers
@@ -43,12 +35,13 @@ var h2 = row.insertCell(1);
 var h3 = row.insertCell(2);
 var h4 = row.insertCell(3);
 var h5 = row.insertCell(4);
-h1.innerText = "Module";
-h2.innerText = "To Do";
-h3.innerText = "Redo";
-h4.innerText = "Submitted";
-h5.innerText = "Done";
-tBody = table.createTBody(); // add tbody to table so insertRow append to tbody not thead  
+h1.innerHTML = "Module";
+h2.innerHTML = "To Do";
+h3.innerHTML = "Redo";
+h4.innerHTML = "Submitted";
+h5.innerHTML = "Done";
+// add tbody to table so insertRow append to tbody not thead
+tBody = table.createTBody();
 
 // Add Elements
 content.appendChild(div_top);
@@ -73,24 +66,24 @@ function remove_all_assignments() {
 
 
 // Create a content box and add it to the dom
-function add_assignment(href, name, module, redo_flag) {
+function add_assignment(href, name, subject, module, redo_flag) {
     // Create Elements
     div = document.createElement("div");
     a = document.createElement("a");
     h3 = document.createElement("h3");
-    //p = document.createElement("p");
+    p = document.createElement("p");
 
     // Populate Elements
     div.className = "message_board";
     a.href = href;
     ass_name = "Assignment: " + name;
-    h3.innerText = ass_name + " (" + module + ")";
-    //p.innerText = "Your Assignment, " + name + " in " + module + " needs to be completed";
+    h3.innerHTML = ass_name;
+    p.innerHTML = "Subject: " + subject + "<br/>Module: " + module;
 
     // Add elemnts to the DOM
     a.appendChild(h3);
     div.appendChild(a);
-    //div.appendChild(p);
+    div.appendChild(p);
     redo_flag ? to_redo_div.appendChild(div) : todo_div.appendChild(div);
 }
 
@@ -109,15 +102,18 @@ function do_the_work(subjects_list) {
 
         // Go throught current subject's json to count different states of excercises
         subject.forEach((excercise) => {
-            console.log(excercise);
+            href = "/messages/thread/" + excercise.pk;
+            name = excercise.description
+            subject = excercise.exercise.module.subject.name
+            module = excercise.exercise.module.name
             switch (excercise.status) {
                 case "New":
                     stats.todo++;
-                    add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name + " [" + excercise.exercise.module.name + "]", false);
+                    add_assignment(href, name, subject, module, false);
                     break;
                 case "Redo":
                     stats.redo++;
-                    add_assignment("/messages/thread/" + excercise.pk, excercise.description, excercise.exercise.module.subject.name + " [" + excercise.exercise.module.name + "]", true);
+                    add_assignment(href, name, subject, module, true);
                     break;
                 case "Submitted":
                     stats.submitted++;
@@ -131,11 +127,14 @@ function do_the_work(subjects_list) {
         });
 
         let row = tBody.insertRow();
-        row.insertCell().innerHTML = `<a href="${subject_url}">${subject_name}</a>`; // row header
-        for (stat in stats) { // filling number columns
+        // row header
+        row.insertCell().innerHTML = `<a href="${subject_url}">${subject_name}</a>`;
+        // filling number columns
+        for (stat in stats) {
             let cell = row.insertCell();
-            cell.innerText = stats[stat];
-            if (stats[stat] == 0) cell.className = "zero"; // dim cell if value is 0
+            cell.innerHTML = stats[stat];
+            // dim cell if value is 0
+            if (stats[stat] == 0) cell.className = "zero";
         }
 
         // dim whole row if everything is Done
