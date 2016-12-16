@@ -1,7 +1,12 @@
+div#content {
+	padding-bottom: 20px;
+}
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
+	line-height: 1.7;
 }
 
 thead {
@@ -10,7 +15,7 @@ thead {
 }
 
 thead td {
-	font-family: Segoe UI, Trebuchet MS, Arial Unicode MS, Arial, sans-serif;
+	font-family: Segoe UI, Lucida Sans, Lucida Sans Unicode, Arial Unicode MS, Arial, sans-serif;
 	text-shadow: 0 1px 2px black;
 	font-size: 1.17em;
 	font-weight: bold;
@@ -22,15 +27,37 @@ td, th {
     padding: 8px;
 }
 
-tr:nth-of-type(even) {
+tbody td {
+	font-weight: bold;
+}
+
+tbody td:first-of-type {
+	text-align: left;
+	font-weight: unset;
+}
+
+td.zero {
+	color: #666;
+	font-weight: unset;
+}
+
+tbody tr.done {
+	color: #666;
+}
+
+tbody tr:nth-of-type(even) {
     background-color: rgb(34, 34, 34);
 }
 
-.left-table {
-	text-align: left;
+tbody tr:hover {
+    background-color: rgba(125,205,0,0.5);
 }
 
-tbody tr {
-	padding-top: 1em;
-	padding-bottom: 1em;
+td a {
+    color: inherit;
+	display: block;
+}
+
+td:hover a {
+	text-decoration: underline;
 }
